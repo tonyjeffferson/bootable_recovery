@@ -64,7 +64,6 @@
 
 using namespace std::chrono_literals;
 
-bool ask_to_ab_reboot(Device* device);
 bool ask_to_cancel_ota(Device* device);
 bool ask_to_continue_unverified(Device* device);
 bool ask_to_continue_downgrade(Device* device);
@@ -440,10 +439,8 @@ static InstallResult TryUpdateBinary(Package* package, bool* wipe_cache,
 
   static bool ab_package_installed = false;
   if (ab_package_installed) {
-    if (ask_to_ab_reboot(device)) {
-      return INSTALL_REBOOT_RECOVERY;
-    }
-    return INSTALL_ERROR;
+    LOG(INFO) << "Rebooting recovery before installing an additional package";
+    return INSTALL_REBOOT_RECOVERY;
   }
 
   if (package_is_ab) {
@@ -635,9 +632,6 @@ static InstallResult TryUpdateBinary(Package* package, bool* wipe_cache,
   if (package_is_ab) {
     ab_package_installed = true;
     PerformPowerwashIfRequired(zip, device);
-    if (!ui->IsSideloadAutoReboot() && ask_to_ab_reboot(device)) {
-      return INSTALL_REBOOT_RECOVERY;
-    }
   }
 
   return INSTALL_SUCCESS;
