@@ -581,8 +581,8 @@ void ScreenRecoveryUI::draw_foreground_locked() {
   }
 }
 
-/* recovery dark:  #7C4DFF
-   recovery light: #F890FF
+/* recovery dark:  #9C5B5B
+   recovery light: #D6A0A0
    fastbootd dark: #E65100
    fastboot light: #FDD835 */
 void ScreenRecoveryUI::SetColor(UIElement e) const {
@@ -591,19 +591,19 @@ void ScreenRecoveryUI::SetColor(UIElement e) const {
       if (fastbootd_logo_enabled_)
         gr_color(0xfd, 0x35, 0x35, 255);
       else
-        gr_color(0xc7, 0x15, 0x85, 255);
+        gr_color(0x9c, 0x5b, 0x5b, 255);
       break;
     case UIElement::INFO:
       if (fastbootd_logo_enabled_)
         gr_color(0xfd, 0xd8, 0x35, 255);
       else
-        gr_color(0xf8, 0x90, 0xff, 255);
+        gr_color(0xd6, 0xa0, 0xa0, 255);
       break;
     case UIElement::HEADER:
       if (fastbootd_logo_enabled_)
         gr_color(0xfd, 0xd8,0x35, 255);
       else
-        gr_color(0xf8, 0x90, 0xff, 255);
+        gr_color(0xd6, 0xa0, 0xa0, 255);
       break;
     case UIElement::MENU:
       gr_color(0xd8, 0xd8, 0xd8, 255);
@@ -612,14 +612,14 @@ void ScreenRecoveryUI::SetColor(UIElement e) const {
       if (fastbootd_logo_enabled_)
         gr_color(0xe6 * 0.20, 0x51 * 0.20, 0x00 * 0.20, 255);
       else
-        gr_color(0x7c * 0.20, 0x4d * 0.20, 0xff * 0.20, 255);
+        gr_color(0x9c * 0.20, 0x5b * 0.20, 0x5b * 0.20, 255);
       break;
     case UIElement::MENU_SEL_BG:
     case UIElement::SCROLLBAR:
       if (fastbootd_logo_enabled_)
         gr_color(0xe6, 0x51, 0x00, 255);
       else
-        gr_color(0x7c, 0x4d, 0xff, 255);
+        gr_color(0x9c, 0x5b, 0x5b, 255);
       break;
     case UIElement::MENU_SEL_BG_ACTIVE:
       gr_color(0, 156, 100, 255);
@@ -1324,6 +1324,7 @@ void ScreenRecoveryUI::SetStage(int current, int max) {
   std::lock_guard<std::mutex> lg(updateMutex);
   stage = current;
   max_stage = max;
+  update_screen_locked();
 }
 
 void ScreenRecoveryUI::PrintV(const char* fmt, bool copy_to_stdout, va_list ap) {
