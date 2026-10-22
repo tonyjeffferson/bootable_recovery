@@ -123,7 +123,11 @@ static auto AdbInstallPackageHandler(Device* device, InstallResult* result) {
   // Calling stat() on this magic filename signals the FUSE to exit.
   struct stat st;
   stat(FUSE_SIDELOAD_HOST_EXIT_PATHNAME, &st);
-  return std::make_pair(*result == INSTALL_SUCCESS, should_continue);
+  // INSTALL_REBOOT_RECOVERY means this package was not installed. Stop sideloading so recovery
+  // can reboot, and report failure to the host instead of claiming the update was applied.
+  const bool install_complete = *result == INSTALL_SUCCESS;
+  const bool continue_sideload = should_continue && *result != INSTALL_REBOOT_RECOVERY;
+  return std::make_pair(install_complete, continue_sideload);
 }
 
 static auto AdbRebootHandler(MinadbdCommand command, InstallResult* result,
