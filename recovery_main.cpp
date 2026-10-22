@@ -527,6 +527,13 @@ int main(int argc, char** argv) {
 
   device->InitDevice();
 
+  // The product can enable recovery ADB without host-key authorization by default.
+  // Don't offer an action to enable a state that is already active.
+  if (android::base::GetProperty("ro.adb.secure.recovery", "1") == "0") {
+    device->RemoveMenuItemForAction(Device::ENABLE_ADB);
+    device->GoHome();
+  }
+
   Device::BuiltinAction next_recovery_action = Device::NO_ACTION;
   while (true) {
     // We start adbd in recovery for the device with userdebug build or a unlocked bootloader.
